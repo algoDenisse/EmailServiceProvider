@@ -1,0 +1,6 @@
+C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\bin\Debug\SendEmail.exe.config
+C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\bin\Debug\SendEmail.exe
+C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\bin\Debug\SendEmail.pdb
+C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\obj\Debug\SendEmail.csprojResolveAssemblyReference.cache
+C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\obj\Debug\SendEmail.exe
+C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\obj\Debug\SendEmail.pdb

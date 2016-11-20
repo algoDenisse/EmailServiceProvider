@@ -1,0 +1,45 @@
+18:29:19.8825682 即将发送，2016年8月 服务月报，回车键确认
+18:29:21.7491510 是否抄送kf&jszc?(y/n)
+y
+18:29:22.9052793 开始发送邮件
+18:33:48.9744177 发送失败, Email = denissepaolarojas@hotmail.com O=1
+18:33:48.9744177 Error al enviar correo.
+18:33:48.9744177    en System.Net.Mail.SmtpClient.Send(MailMessage message)
+   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\Program.cs:línea 100
+18:33:48.9744177 ===== 执行完成 =====
+18:34:10.4735179 即将发送，2016年11月 服务月报，回车键确认
+18:34:12.6174298 是否抄送kf&jszc?(y/n)
+y
+18:34:13.9985923 开始发送邮件
+18:39:42.6133881 发送失败, Email = denissepaolarojas@hotmail.com O=1
+18:39:42.6133881 Error al enviar correo.
+18:39:42.6153823    en System.Net.Mail.SmtpClient.Send(MailMessage message)
+   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\Program.cs:línea 100
+18:39:42.6153823 ===== 执行完成 =====
+18:53:57.1759121 即将发送，2016年11月 服务月报，回车键确认
+18:53:58.7865143 是否抄送kf&jszc?(y/n)
+y
+18:53:59.9598551 开始发送邮件
+18:57:49.4358563 发送失败, Email = denissepaolarojas@hotmail.com O=1
+18:57:49.4568703 Error al enviar correo.
+18:57:49.4568703    en System.Net.Mail.SmtpClient.Send(MailMessage message)
+   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\Program.cs:línea 101
+18:57:49.4578704 ===== 执行完成 =====
+18:57:55.0449544 即将发送，2016年11月 服务月报，回车键确认
+18:57:57.6595943 是否抄送kf&jszc?(y/n)
+y
+18:57:59.1955903 开始发送邮件
+18:58:30.2623241 发送成功, Email = denissepaolarojas@hotmail.com O=1 OU=2
+19:07:21.1793410 ===== 执行完成 =====
+19:07:27.7139525 即将发送，2016年11月 服务月报，回车键确认
+19:07:30.6070787 是否抄送kf&jszc?(y/n)
+y
+19:07:33.5730431 开始发送邮件
+19:07:49.6620092 发送成功, Email = denissepaolarojas@hotmail.com O=1 OU=2
+19:07:49.6620092 ===== 执行完成 =====
+19:10:28.0097365 即将发送，2016年11月 服务月报，回车键确认
+19:10:30.0220673 是否抄送kf&jszc?(y/n)
+y
+19:10:31.5775641 开始发送邮件
+19:10:44.9884767 Mensaje enviado a, Email = denissepaolarojas@hotmail.com O=1 OU=2
+19:10:44.9884767 ===== 执行完成 =====
