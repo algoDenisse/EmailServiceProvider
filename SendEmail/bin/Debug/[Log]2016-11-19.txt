@@ -1,45 +1,31 @@
-18:29:19.8825682 即将发送，2016年8月 服务月报，回车键确认
-18:29:21.7491510 是否抄送kf&jszc?(y/n)
-y
-18:29:22.9052793 开始发送邮件
-18:33:48.9744177 发送失败, Email = denissepaolarojas@hotmail.com O=1
-18:33:48.9744177 Error al enviar correo.
-18:33:48.9744177    en System.Net.Mail.SmtpClient.Send(MailMessage message)
-   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\Program.cs:línea 100
-18:33:48.9744177 ===== 执行完成 =====
-18:34:10.4735179 即将发送，2016年11月 服务月报，回车键确认
-18:34:12.6174298 是否抄送kf&jszc?(y/n)
-y
-18:34:13.9985923 开始发送邮件
-18:39:42.6133881 发送失败, Email = denissepaolarojas@hotmail.com O=1
-18:39:42.6133881 Error al enviar correo.
-18:39:42.6153823    en System.Net.Mail.SmtpClient.Send(MailMessage message)
-   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\Program.cs:línea 100
-18:39:42.6153823 ===== 执行完成 =====
-18:53:57.1759121 即将发送，2016年11月 服务月报，回车键确认
-18:53:58.7865143 是否抄送kf&jszc?(y/n)
-y
-18:53:59.9598551 开始发送邮件
-18:57:49.4358563 发送失败, Email = denissepaolarojas@hotmail.com O=1
-18:57:49.4568703 Error al enviar correo.
-18:57:49.4568703    en System.Net.Mail.SmtpClient.Send(MailMessage message)
-   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\SendEmail\Program.cs:línea 101
-18:57:49.4578704 ===== 执行完成 =====
-18:57:55.0449544 即将发送，2016年11月 服务月报，回车键确认
-18:57:57.6595943 是否抄送kf&jszc?(y/n)
-y
-18:57:59.1955903 开始发送邮件
-18:58:30.2623241 发送成功, Email = denissepaolarojas@hotmail.com O=1 OU=2
-19:07:21.1793410 ===== 执行完成 =====
-19:07:27.7139525 即将发送，2016年11月 服务月报，回车键确认
-19:07:30.6070787 是否抄送kf&jszc?(y/n)
-y
-19:07:33.5730431 开始发送邮件
-19:07:49.6620092 发送成功, Email = denissepaolarojas@hotmail.com O=1 OU=2
-19:07:49.6620092 ===== 执行完成 =====
-19:10:28.0097365 即将发送，2016年11月 服务月报，回车键确认
-19:10:30.0220673 是否抄送kf&jszc?(y/n)
-y
-19:10:31.5775641 开始发送邮件
-19:10:44.9884767 Mensaje enviado a, Email = denissepaolarojas@hotmail.com O=1 OU=2
-19:10:44.9884767 ===== 执行完成 =====
+19:47:41.4011175 Mensaje enviado a, Email = denissepaolarojas@hotmail.com O=1 OU=2
+19:47:43.0475858 ===== Mensaje enviado =====
+19:55:48.8958589 Mensaje enviado a, Email = denissepaolarojas@hotmail.com O=1 OU=2
+19:55:48.8958589 ===== Mensaje enviado =====
+20:14:12.3210045 El proceso no puede obtener acceso al archivo 'C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\bin\Debug\contacts.csv' porque está siendo utilizado en otro proceso.Void WinIOError(Int32, System.String)
+20:14:32.8223082 Índice fuera de los límites de la matriz.System.Collections.Generic.List`1[SendEmail.Program+Contact] GetContacts()
+20:15:53.8373952 Contactos Agregados
+20:15:58.5919986 Error al enviar el correo, Email = denissepaolarojas@hotmail.com
+20:15:58.5919986 Referencia a objeto no establecida como instancia de un objeto.
+20:15:58.5950006    en SendEmail.Program.GetMailMessage(Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\Program.cs:línea 131
+   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\Program.cs:línea 87
+20:15:59.4909779 ===== Mensaje enviado =====
+20:16:19.1622016 Contactos Agregados
+20:16:19.2332495 Error al enviar el correo, Email = denissepaolarojas@hotmail.com
+20:16:19.2332495 Referencia a objeto no establecida como instancia de un objeto.
+20:16:19.2372517    en SendEmail.Program.GetMailMessage(Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\Program.cs:línea 131
+   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\Program.cs:línea 87
+20:16:19.2372517 ===== Mensaje enviado =====
+20:16:26.7264068 Contactos Agregados
+20:16:26.7974537 Error al enviar el correo, Email = denissepaolarojas@hotmail.com
+20:16:26.7974537 Referencia a objeto no establecida como instancia de un objeto.
+20:16:26.8004557    en SendEmail.Program.GetMailMessage(Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\Program.cs:línea 131
+   en SendEmail.Program.SendMail(SmtpClient smtpClient, Contact contact) en C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\Program.cs:línea 87
+20:16:26.8004557 ===== Mensaje enviado =====
+20:19:24.3123849 Contactos Agregados
+20:19:32.0283482 Mensaje enviado a, Email = denissepaolarojas@hotmail.com
+20:19:38.1793079 ===== Mensaje enviado =====
+20:22:21.1473830 Mensaje enviado a, Email = denissepaolarojas@hotmail.com
+20:22:21.1473830 ===== Mensaje enviado =====
+20:24:39.7982921 Mensaje enviado a, Email = denissepaolarojas@hotmail.com
+20:24:39.7982921 ===== Mensaje enviado =====
