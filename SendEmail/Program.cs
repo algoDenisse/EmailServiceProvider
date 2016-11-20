@@ -8,48 +8,145 @@ using System.Text;
 
 namespace SendEmail
 {
-    class Program
+    public class Notification
     {
-        private static string baseDir = "";
-        private static StreamWriter sw;
+        private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
+        public string[] hora_diario = new string[2];
+        public string[] dia_hora_semanal = new string[2];
+        public string[] dia_hora_mensual = new string[2];
 
-        static void Main(string[] args)
+        public Notification()
         {
-            Console.WriteLine("--- Servicio de Emails --- ");
-            baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            var date = DateTime.Now.ToString("yyyy-MM-dd");
-            sw = new StreamWriter($"[Log]{date}.txt", true);
-            Console.WriteLine($"=====[Log]{date}.txt =====") ;
-           
-            List<Contact> contacts = null;
+
+        }
+        public void getConfiguration()
+        {
+            var dir = baseDir + "\\configuration.csv";
             try
             {
-                contacts = GetContacts();
+                StreamReader sr = new StreamReader(dir, Encoding.Default);
+                string line;
+                int line_number = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+                   var config = line.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                   switch (line_number){
+                        case 0:
+                            hora_diario[0] = config[1];
+                            hora_diario[1] = "";
+                            break;
+                        case 1:
+                            dia_hora_semanal[0] = config[1];
+                            dia_hora_semanal[1] = config[2];
+                            break;
+                        case 2:
+                            dia_hora_mensual[0] = config[1];
+                            dia_hora_mensual[1] = config[2];
+                            break;
+
+                    }
+
+                    line_number++;  
+                    
+                }
+                sr.Close();
+                
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.TargetSite);
+                Log(e.Message + e.TargetSite);
+                throw;
             }
-            
 
-            var smtpClient = GetSmtpClient();
-            if (contacts != null)
-            {
-                foreach (var contact in contacts)
-                {
-                    SendMail(smtpClient, contact);
-                }
+        }
 
-                Log("===== Mensaje enviado =====");
-            }
-            
-            sw.Flush();
-            sw.Close();
-            Console.WriteLine();
-            Console.WriteLine(" Mensaje Enviado ");
+        public void sendDailyMail()
+        {
+
+        }
+        public void sendWeeklyMail()
+        {
+
+        }
+        
+        public void sendMonthlyMail()
+        {
+
+        }
+
+        public void sendMail()
+        {
+            Console.WriteLine("--- Servicio de Emails --- ");
+            List<Contact> contacts = null;
+        }
+        static void Main(string[] args)
+        {
+            Console.WriteLine("--- Leyendo configuracion del Servicio de Emails --- ");
+            Notification nm = new Notification();
+            nm.getConfiguration();
+            Console.WriteLine("Configuracion Diaria: " + nm.hora_diario[0]);
+            Console.WriteLine("Configuracion Semanal: " + nm.dia_hora_semanal[0] +" a las "+ nm.dia_hora_semanal[1]);
+            Console.WriteLine("Configuracion Mesual: Los " + nm.dia_hora_mensual[0]+ " a las " + nm.dia_hora_mensual[1]);
+
+            Console.WriteLine("Desea enviar un correo electronico? (y/n)");
+
+
+
+
             Console.ReadLine();
         }
+        private static void Log(string logs)
+        {
+            var date = DateTime.Now.TimeOfDay.ToString();
+            Console.WriteLine(date + ' ' + logs);
+            sw.WriteLine(date + ' ' + logs);
+        }
+
+    }
+
+    public class Program
+    {
+        private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
+
+        //static void Main(string[] args)
+        //{
+        //    Console.WriteLine("--- Servicio de Emails --- ");
+        //    baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        //    var date = DateTime.Now.ToString("yyyy-MM-dd");
+        //    sw = new StreamWriter($"[Log]{date}.txt", true);
+        //    Console.WriteLine($"=====[Log]{date}.txt =====") ;
+           
+        //    List<Contact> contacts = null;
+        //    try
+        //    {
+        //        contacts = GetContacts();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        Console.WriteLine(e.TargetSite);
+        //    }
+            
+
+        //    var smtpClient = GetSmtpClient();
+        //    if (contacts != null)
+        //    {
+        //        foreach (var contact in contacts)
+        //        {
+        //            SendMail(smtpClient, contact);
+        //        }
+
+        //        Log("===== Mensaje enviado =====");
+        //    }
+            
+        //    sw.Flush();
+        //    sw.Close();
+        //    Console.WriteLine();
+        //    Console.WriteLine(" Mensaje Enviado ");
+        //    Console.ReadLine();
+        //}
 
         private static SmtpClient GetSmtpClient()
         {
@@ -146,7 +243,7 @@ namespace SendEmail
                     line = line.Replace("”", "");
                     line = line.Replace("\"", "");
                     line = line.Replace("'", "");
-                    line = line.Replace(" ", "");
+
 
                     var contact = line.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                     int ccnumber = 2;
@@ -174,11 +271,7 @@ namespace SendEmail
 
         }
 
-        public class Contact
-        {
-            public string Email { get; set; }
-            public string Body { get; set; }
-        }
+       
 
         private static void Log(string logs)
         {
@@ -186,5 +279,10 @@ namespace SendEmail
             Console.WriteLine(date+' '+logs);
             sw.WriteLine(date + ' '+logs);
         }
+    }
+    public class Contact
+    {
+        public string Email { get; set; }
+        public string Body { get; set; }
     }
 }
