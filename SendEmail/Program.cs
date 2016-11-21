@@ -11,10 +11,13 @@ namespace SendEmail
     public class Notification
     {
         private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
+     //   private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
         public string[] hora_diario = new string[2];
         public string[] dia_hora_semanal = new string[2];
         public string[] dia_hora_mensual = new string[2];
+
+        Program emailSender = new Program();
+        
 
         public Notification()
         {
@@ -61,24 +64,86 @@ namespace SendEmail
 
         }
 
-        public void sendDailyMail()
+        public void sendDailyMail(List<Contact> contacts)
         {
+            var smtpClient = Program.GetSmtpClient();
+            if (contacts != null)
+            {
+                foreach (var contact in contacts)
+                {
+                    if (contact.Type == "D")
+                    {
+                        emailSender.SendMail(smtpClient, contact);
+                    }
 
+                }
+
+                Log("===== Mensajes Diarios enviados =====");
+            }
         }
-        public void sendWeeklyMail()
+        public void sendWeeklyMail(List<Contact> contacts)
         {
+            var smtpClient = Program.GetSmtpClient();
+            if (contacts != null)
+            {
+                foreach (var contact in contacts)
+                {
+                    if (contact.Type == "W")
+                    {
+                        emailSender.SendMail(smtpClient, contact);
+                    }
 
+                }
+
+                Log("===== Mensajes Semanales enviados =====");
+            }
         }
         
-        public void sendMonthlyMail()
+        public void sendMonthlyMail(List<Contact> contacts)
         {
+            var smtpClient = Program.GetSmtpClient();
+            if (contacts != null)
+            {
+                foreach (var contact in contacts)
+                {
+                    if(contact.Type == "M")
+                    {
+                        emailSender.SendMail(smtpClient, contact);
+                    }
+                    
+                }
 
+                Log("===== Mensajes Mensuales enviados =====");
+            }
         }
 
         public void sendMail()
         {
-            Console.WriteLine("--- Servicio de Emails --- ");
+            //Console.WriteLine("--- Servicio de Emails --- ");
             List<Contact> contacts = null;
+            try
+            {
+                contacts = Program.GetContacts();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.TargetSite);
+            }
+            var smtpClient = Program.GetSmtpClient();
+            if (contacts != null)
+            {
+                foreach (var contact in contacts)
+                {
+                    if (contact.Type == "E")
+                    {
+                        emailSender.SendMail(smtpClient, contact);
+                    }
+                }
+
+                Log("===== Mensaje enviado =====");
+            }
+
         }
         static void Main(string[] args)
         {
@@ -90,6 +155,15 @@ namespace SendEmail
             Console.WriteLine("Configuracion Mesual: Los " + nm.dia_hora_mensual[0]+ " a las " + nm.dia_hora_mensual[1]);
 
             Console.WriteLine("Desea enviar un correo electronico? (y/n)");
+            var ans = Console.ReadLine();
+            if(ans == "y")
+            {
+                nm.sendMail();
+            }
+            else
+            {
+                Console.WriteLine("Se enviaran unicamente los correos programados como eventuales en el archivo de configuracion.");
+            }
 
 
 
@@ -100,55 +174,25 @@ namespace SendEmail
         {
             var date = DateTime.Now.TimeOfDay.ToString();
             Console.WriteLine(date + ' ' + logs);
-            sw.WriteLine(date + ' ' + logs);
         }
 
     }
 
-    public class Program
+    public interface IEmailSender
+    {
+        void SendMail(SmtpClient smtpClient, Contact contact);
+    }
+
+    public class Program : IEmailSender
     {
         private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
-
-        //static void Main(string[] args)
-        //{
-        //    Console.WriteLine("--- Servicio de Emails --- ");
-        //    baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        //    var date = DateTime.Now.ToString("yyyy-MM-dd");
-        //    sw = new StreamWriter($"[Log]{date}.txt", true);
-        //    Console.WriteLine($"=====[Log]{date}.txt =====") ;
-           
-        //    List<Contact> contacts = null;
-        //    try
-        //    {
-        //        contacts = GetContacts();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //        Console.WriteLine(e.TargetSite);
-        //    }
-            
-
-        //    var smtpClient = GetSmtpClient();
-        //    if (contacts != null)
-        //    {
-        //        foreach (var contact in contacts)
-        //        {
-        //            SendMail(smtpClient, contact);
-        //        }
-
-        //        Log("===== Mensaje enviado =====");
-        //    }
-            
+        //private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
+          
         //    sw.Flush();
         //    sw.Close();
-        //    Console.WriteLine();
-        //    Console.WriteLine(" Mensaje Enviado ");
-        //    Console.ReadLine();
-        //}
+       
 
-        private static SmtpClient GetSmtpClient()
+        public static SmtpClient GetSmtpClient()
         {
             try
             {
@@ -176,7 +220,7 @@ namespace SendEmail
 
         }
 
-        private static void SendMail(SmtpClient smtpClient, Contact contact)
+        public void SendMail(SmtpClient smtpClient, Contact contact)
         {
             try
             {
@@ -213,7 +257,7 @@ namespace SendEmail
             }
             catch (Exception e)
             {
-
+                Console.WriteLine(e.Message);
                 throw;
             }
 
@@ -225,7 +269,7 @@ namespace SendEmail
             return content;
         }
 
-        private static List<Contact> GetContacts()
+        public static List<Contact> GetContacts()
         {
             List<Contact> contacts = new List<Contact>();
             var dir = baseDir + "\\contacts.csv";
@@ -251,7 +295,7 @@ namespace SendEmail
                     {
                         string[] ccArray = new string[3];
                         ccArray[0] = contact[0];
-                        contacts.Add(new Contact() {  Email = contact[0], Body = contact[1] });
+                        contacts.Add(new Contact() {  Email = contact[0], Body = contact[1] , Type = contact[2] });
                     }
                     else
                     {
@@ -277,12 +321,13 @@ namespace SendEmail
         {
             var date = DateTime.Now.TimeOfDay.ToString() ;
             Console.WriteLine(date+' '+logs);
-            sw.WriteLine(date + ' '+logs);
+           // sw.WriteLine(date + ' '+logs);
         }
     }
     public class Contact
     {
         public string Email { get; set; }
         public string Body { get; set; }
+        public string Type { get; set; }
     }
 }
