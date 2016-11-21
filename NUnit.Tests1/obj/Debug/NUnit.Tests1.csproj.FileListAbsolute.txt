@@ -1,1 +1,0 @@
-C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\NUnit.Tests1\obj\Debug\NUnit.Tests1.csprojResolveAssemblyReference.cache
