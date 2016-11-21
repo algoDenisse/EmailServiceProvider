@@ -12,3 +12,11 @@ C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail
 C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\bin\Debug\SendEmail.pdb
 C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\bin\Debug\nunit.framework.dll
 C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\SendEmail\bin\Debug\nunit.framework.xml
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\bin\Debug\SendEmail.exe.config
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\bin\Debug\SendEmail.exe
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\bin\Debug\SendEmail.pdb
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\bin\Debug\nunit.framework.dll
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\bin\Debug\nunit.framework.xml
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\obj\Debug\SendEmail.csprojResolveAssemblyReference.cache
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\obj\Debug\SendEmail.exe
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\SendEmail\obj\Debug\SendEmail.pdb

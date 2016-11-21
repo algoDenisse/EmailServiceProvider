@@ -7,3 +7,12 @@ C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail
 C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\EmailSenderTest\obj\Debug\EmailSenderTest.csprojResolveAssemblyReference.cache
 C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\EmailSenderTest\obj\Debug\EmailSenderTest.dll
 C:\Users\Denisse\Documents\2016\Aseguramiento\Proyectos\sendmail-master\sendmail-master\EmailServiceProvider\EmailSenderTest\obj\Debug\EmailSenderTest.pdb
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\bin\Debug\EmailSenderTest.dll
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\bin\Debug\EmailSenderTest.pdb
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\bin\Debug\nunit.framework.dll
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\bin\Debug\SendEmail.exe
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\bin\Debug\SendEmail.pdb
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\bin\Debug\nunit.framework.xml
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\obj\Debug\EmailSenderTest.csprojResolveAssemblyReference.cache
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\obj\Debug\EmailSenderTest.dll
+C:\Users\Treicy\Documents\2016\II Semestre\Aseguramiento\Proyecto 4\EmailServiceProvider\EmailSenderTest\obj\Debug\EmailSenderTest.pdb

@@ -15,6 +15,8 @@ namespace SendEmail
         public string[] hora_diario = new string[2];
         public string[] dia_hora_semanal = new string[2];
         public string[] dia_hora_mensual = new string[2];
+        public string configuration_dir = baseDir + "\\configuration.csv";
+        
 
         Program emailSender = new Program();
         
@@ -25,10 +27,10 @@ namespace SendEmail
         }
         public void getConfiguration()
         {
-            var dir = baseDir + "\\configuration.csv";
+            
             try
             {
-                StreamReader sr = new StreamReader(dir, Encoding.Default);
+                StreamReader sr = new StreamReader(configuration_dir, Encoding.Default);
                 string line;
                 int line_number = 0;
                 while ((line = sr.ReadLine()) != null)
@@ -186,11 +188,12 @@ namespace SendEmail
     public class Program : IEmailSender
     {
         private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        public static string contact_dir = baseDir + "\\contacts.csv";
         //private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
-          
+
         //    sw.Flush();
         //    sw.Close();
-       
+
 
         public static SmtpClient GetSmtpClient()
         {
@@ -272,10 +275,10 @@ namespace SendEmail
         public static List<Contact> GetContacts()
         {
             List<Contact> contacts = new List<Contact>();
-            var dir = baseDir + "\\contacts.csv";
+            
             try
             {
-                StreamReader sr = new StreamReader(dir, Encoding.Default);
+                StreamReader sr = new StreamReader(contact_dir, Encoding.Default);
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
