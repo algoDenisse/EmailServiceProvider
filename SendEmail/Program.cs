@@ -8,67 +8,109 @@ using System.Text;
 
 namespace SendEmail
 {
-    public class Notification
+    public class Notification : INotification
     {
         private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-     //   private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
+        //   private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
         public string[] hora_diario = new string[2];
         public string[] dia_hora_semanal = new string[2];
         public string[] dia_hora_mensual = new string[2];
         public string configuration_dir = baseDir + "\\configuration.csv";
-        
+        public static string contact_dir = baseDir + "\\contacts.csv";
 
-        Program emailSender = new Program();
-        
 
-        public Notification()
+        IEmailSender emailSender;
+
+        public Notification(IEmailSender emailSender)
         {
-
+            this.emailSender = emailSender;
         }
+
+        public bool fileExists(string path)
+        {
+            //Some code to test that the file exists
+            return File.Exists(path);
+        }
+
+        public bool fileEmpty(string path)
+        {
+            if (new System.IO.FileInfo(path).Length == 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void setDailyConfig(string[] config)
+        {
+            hora_diario[0] = config[1];
+            hora_diario[1] = "";
+            
+        }
+        public void setWeeklyConfig(string[] config)
+        {
+            dia_hora_semanal[0] = config[1];
+            dia_hora_semanal[1] = config[2];
+        }
+        public void setMonthlyConfig(string[] config)
+        {
+            dia_hora_mensual[0] = config[1];
+            dia_hora_mensual[1] = config[2];
+        }
+
+
         public void getConfiguration()
         {
-            
-            try
+            var dir = baseDir + "\\configuration.csv";
+            if (fileExists(dir) && !fileEmpty(dir))
             {
-                StreamReader sr = new StreamReader(configuration_dir, Encoding.Default);
-                string line;
-                int line_number = 0;
-                while ((line = sr.ReadLine()) != null)
+
+                try
                 {
-                   var config = line.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                   switch (line_number){
-                        case 0:
-                            hora_diario[0] = config[1];
-                            hora_diario[1] = "";
-                            break;
-                        case 1:
-                            dia_hora_semanal[0] = config[1];
-                            dia_hora_semanal[1] = config[2];
-                            break;
-                        case 2:
-                            dia_hora_mensual[0] = config[1];
-                            dia_hora_mensual[1] = config[2];
-                            break;
+                    StreamReader sr = new StreamReader(configuration_dir, Encoding.Default);
+                    string line;
+                    int line_number = 0;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        var config = line.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        switch (line_number)
+                        {
+                            case 0:
+                                setDailyConfig(config);
+                                break;
+                            case 1:
+                                setWeeklyConfig(config);
+                                break;
+                            case 2:
+                                setMonthlyConfig(config);
+                                break;
+
+                        }
+
+                        line_number++;
 
                     }
-
-                    line_number++;  
-                    
+                    sr.Close();
                 }
-                sr.Close();
-                
+                catch (Exception e)
+                {
+                    Log(e.Message + e.TargetSite);
+                    throw;
+                }
             }
-            catch (Exception e)
+            else
             {
-                Log(e.Message + e.TargetSite);
-                throw;
+                Console.WriteLine("Archivo de configuracion no existente");
+                throw new Exception("Archivo inexistente o vacio");
+
             }
+
 
         }
 
         public void sendDailyMail(List<Contact> contacts)
         {
-            var smtpClient = Program.GetSmtpClient();
+            var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
             {
                 foreach (var contact in contacts)
@@ -85,7 +127,7 @@ namespace SendEmail
         }
         public void sendWeeklyMail(List<Contact> contacts)
         {
-            var smtpClient = Program.GetSmtpClient();
+            var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
             {
                 foreach (var contact in contacts)
@@ -100,39 +142,39 @@ namespace SendEmail
                 Log("===== Mensajes Semanales enviados =====");
             }
         }
-        
+
         public void sendMonthlyMail(List<Contact> contacts)
         {
-            var smtpClient = Program.GetSmtpClient();
+            var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
             {
                 foreach (var contact in contacts)
                 {
-                    if(contact.Type == "M")
+                    if (contact.Type == "M")
                     {
                         emailSender.SendMail(smtpClient, contact);
                     }
-                    
+
                 }
 
                 Log("===== Mensajes Mensuales enviados =====");
             }
         }
 
-        public void sendMail()
+        public void sendEventualMail()
         {
             //Console.WriteLine("--- Servicio de Emails --- ");
             List<Contact> contacts = null;
             try
             {
-                contacts = Program.GetContacts();
+                contacts = emailSender.GetContacts(contact_dir);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.TargetSite);
             }
-            var smtpClient = Program.GetSmtpClient();
+            var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
             {
                 foreach (var contact in contacts)
@@ -150,17 +192,18 @@ namespace SendEmail
         static void Main(string[] args)
         {
             Console.WriteLine("--- Leyendo configuracion del Servicio de Emails --- ");
-            Notification nm = new Notification();
+            Program emailSender = new Program();
+            Notification nm = new Notification(emailSender);
             nm.getConfiguration();
             Console.WriteLine("Configuracion Diaria: " + nm.hora_diario[0]);
-            Console.WriteLine("Configuracion Semanal: " + nm.dia_hora_semanal[0] +" a las "+ nm.dia_hora_semanal[1]);
-            Console.WriteLine("Configuracion Mesual: Los " + nm.dia_hora_mensual[0]+ " a las " + nm.dia_hora_mensual[1]);
+            Console.WriteLine("Configuracion Semanal: " + nm.dia_hora_semanal[0] + " a las " + nm.dia_hora_semanal[1]);
+            Console.WriteLine("Configuracion Mesual: Los " + nm.dia_hora_mensual[0] + " a las " + nm.dia_hora_mensual[1]);
 
             Console.WriteLine("Desea enviar un correo electronico? (y/n)");
             var ans = Console.ReadLine();
-            if(ans == "y")
+            if (ans == "y")
             {
-                nm.sendMail();
+                nm.sendEventualMail();
             }
             else
             {
@@ -180,22 +223,17 @@ namespace SendEmail
 
     }
 
-    public interface IEmailSender
-    {
-        void SendMail(SmtpClient smtpClient, Contact contact);
-    }
 
     public class Program : IEmailSender
     {
-        private static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        public static string contact_dir = baseDir + "\\contacts.csv";
+        public static string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
         //private static StreamWriter sw = new StreamWriter($"[Log]{DateTime.Now.ToString("yyyy-MM-dd")}.txt", true);
 
         //    sw.Flush();
         //    sw.Close();
 
 
-        public static SmtpClient GetSmtpClient()
+        public SmtpClient GetSmtpClient()
         {
             try
             {
@@ -239,7 +277,7 @@ namespace SendEmail
             }
         }
 
-        private static MailMessage GetMailMessage(Contact contact)
+        public MailMessage GetMailMessage(Contact contact)
         {
             try
             {
@@ -247,12 +285,12 @@ namespace SendEmail
                 string content = GetContent(contact);
                 string email = ConfigurationManager.AppSettings["email"];
                 MailMessage mailMessage = new MailMessage(email, contact.Email);
-                mailMessage.Subject =  subject;
+                mailMessage.Subject = subject;
                 mailMessage.Body = content;
                 mailMessage.BodyEncoding = Encoding.UTF8;
                 mailMessage.IsBodyHtml = true;
                 mailMessage.Priority = MailPriority.Normal;
-               
+
                 mailMessage.CC.Add("lserrano467@gmail.com");
                 mailMessage.CC.Add("tracy_sanchez13@hotmail.com");
                 return mailMessage;
@@ -266,23 +304,23 @@ namespace SendEmail
 
         }
 
-        private static string GetContent(Contact contact)
+        public string GetContent(Contact contact)
         {
-            string content = $"<p align='left' >{contact.Body} </p>";  
+            string content = $"<p align='left' >{contact.Body} </p>";
             return content;
         }
 
-        public static List<Contact> GetContacts()
+        public List<Contact> GetContacts(string file_dir)
         {
             List<Contact> contacts = new List<Contact>();
-            
+
             try
             {
-                StreamReader sr = new StreamReader(contact_dir, Encoding.Default);
+                StreamReader sr = new StreamReader(file_dir, Encoding.Default);
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    
+
                     line = line.Replace("，", ",");
                     line = line.Replace("；", ",");
                     line = line.Replace(";", ",");
@@ -298,7 +336,7 @@ namespace SendEmail
                     {
                         string[] ccArray = new string[3];
                         ccArray[0] = contact[0];
-                        contacts.Add(new Contact() {  Email = contact[0], Body = contact[1] , Type = contact[2] });
+                        contacts.Add(new Contact() { Email = contact[0], Body = contact[1], Type = contact[2] });
                     }
                     else
                     {
@@ -312,19 +350,19 @@ namespace SendEmail
             }
             catch (Exception e)
             {
-                Log(e.Message+e.TargetSite);
+                Log(e.Message + e.TargetSite);
                 throw;
             }
 
         }
 
-       
 
-        private static void Log(string logs)
+
+        public void Log(string logs)
         {
-            var date = DateTime.Now.TimeOfDay.ToString() ;
-            Console.WriteLine(date+' '+logs);
-           // sw.WriteLine(date + ' '+logs);
+            var date = DateTime.Now.TimeOfDay.ToString();
+            Console.WriteLine(date + ' ' + logs);
+            // sw.WriteLine(date + ' '+logs);
         }
     }
     public class Contact
