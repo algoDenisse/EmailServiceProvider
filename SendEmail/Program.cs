@@ -59,9 +59,9 @@ namespace SendEmail
         }
 
 
-        public void getConfiguration()
+        public void getConfiguration(string dir)
         {
-            var dir = baseDir + "\\configuration.csv";
+            
             if (fileExists(dir) && !fileEmpty(dir))
             {
 
@@ -108,7 +108,7 @@ namespace SendEmail
 
         }
 
-        public void sendDailyMail(List<Contact> contacts)
+        public Boolean sendDailyMail(List<Contact> contacts)
         {
             var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
@@ -122,10 +122,16 @@ namespace SendEmail
 
                 }
 
-                Log("===== Mensajes Diarios enviados =====");
+                Log("===== Mensajes Eventuales enviados =====");
+                return true;
+            }
+            else
+            {
+                Log("===== Mensajes Eventuales no enviados =====");
+                return false;
             }
         }
-        public void sendWeeklyMail(List<Contact> contacts)
+        public Boolean sendWeeklyMail(List<Contact> contacts)
         {
             var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
@@ -140,10 +146,17 @@ namespace SendEmail
                 }
 
                 Log("===== Mensajes Semanales enviados =====");
+                return true;
             }
+            else
+            {
+                Log("===== Mensajes Semanales no enviados =====");
+                return false;
+            }
+
         }
 
-        public void sendMonthlyMail(List<Contact> contacts)
+        public Boolean sendMonthlyMail(List<Contact> contacts)
         {
             var smtpClient = emailSender.GetSmtpClient();
             if (contacts != null)
@@ -158,10 +171,17 @@ namespace SendEmail
                 }
 
                 Log("===== Mensajes Mensuales enviados =====");
+                return true;
             }
+            else
+            {
+                Log("===== Mensajes Mensuales no enviados =====");
+                return false;
+            }
+
         }
 
-        public void sendEventualMail()
+        public Boolean sendEventualMail()
         {
             //Console.WriteLine("--- Servicio de Emails --- ");
             List<Contact> contacts = null;
@@ -186,6 +206,12 @@ namespace SendEmail
                 }
 
                 Log("===== Mensaje enviado =====");
+                return true;
+            }
+            else
+            {
+                Log("===== Mensaje enviado =====");
+                return false;
             }
 
         }
@@ -194,7 +220,7 @@ namespace SendEmail
             Console.WriteLine("--- Leyendo configuracion del Servicio de Emails --- ");
             Program emailSender = new Program();
             Notification nm = new Notification(emailSender);
-            nm.getConfiguration();
+            nm.getConfiguration(nm.configuration_dir);
             Console.WriteLine("Configuracion Diaria: " + nm.hora_diario[0]);
             Console.WriteLine("Configuracion Semanal: " + nm.dia_hora_semanal[0] + " a las " + nm.dia_hora_semanal[1]);
             Console.WriteLine("Configuracion Mesual: Los " + nm.dia_hora_mensual[0] + " a las " + nm.dia_hora_mensual[1]);
@@ -360,9 +386,10 @@ namespace SendEmail
 
         public void Log(string logs)
         {
+            StreamWriter sw = sw = new StreamWriter(baseDir + "\\Log.txt");
             var date = DateTime.Now.TimeOfDay.ToString();
+            sw.WriteLine(logs);
             Console.WriteLine(date + ' ' + logs);
-            // sw.WriteLine(date + ' '+logs);
         }
     }
     public class Contact

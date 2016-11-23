@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SendEmail;
 using System.Net.Mail;
+using System.IO;
 
 namespace EmailSenderTest
 {
@@ -54,7 +55,7 @@ namespace EmailSenderTest
             Mock<INotification> mockNotification = new Mock<INotification>();
             //Verifies that when calling getConfiguration(), setDailyConfig() is also called.
             mockNotification.Setup(x => x.setDailyConfig(someconfigarray));
-            mockNotification.Object.getConfiguration();
+            mockNotification.Object.getConfiguration(nm.configuration_dir);
             mockNotification.Verify(x => x.setDailyConfig(someconfigarray),
                 Times.AtLeastOnce(), "Error setting up Daily config");
         }
@@ -64,7 +65,7 @@ namespace EmailSenderTest
         {
             string[] someconfigarray = { };
             Mock<INotification> mockNotification = new Mock<INotification>();
-            mockNotification.Object.getConfiguration();
+            mockNotification.Object.getConfiguration(nm.configuration_dir);
             mockNotification.Setup(x => x.setWeeklyConfig(someconfigarray));
             mockNotification.Verify(x => x.setWeeklyConfig(someconfigarray),
                 Times.AtLeastOnce(), "Error setting up Weekly config");
@@ -74,7 +75,7 @@ namespace EmailSenderTest
         {
             string[] someconfigarray = { };
             Mock<INotification> mockNotification = new Mock<INotification>();
-            mockNotification.Object.getConfiguration();
+            mockNotification.Object.getConfiguration(nm.configuration_dir);
             mockNotification.Setup(x => x.setMonthlyConfig(someconfigarray));
             mockNotification.Verify(x => x.setMonthlyConfig(someconfigarray),
                 Times.AtLeastOnce(), "Error setting up Monthly config");
@@ -82,10 +83,6 @@ namespace EmailSenderTest
         [Test]
         public void readEmptyConfigurationFile_Test()
         {
-            //esta esta mala
-            //ocupamos ver como usar un stub para que getConfiguration nos tire una exepcion
-            // file empty = verdadero
-            //getConfiguration();
             string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             var dir = baseDir + "\\configuration.csv";
             var directotyStub = Substitute.For<INotification>();
@@ -304,21 +301,24 @@ namespace EmailSenderTest
         [Test]
         public void getContactsMessage_Test()
         {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void getContactsMessageWithNoSubject_Test()
-        {
+            Program pg = new Program();
+            SmtpClient client = pg.GetSmtpClient();
+            Contact contact = new Contact();
+            contact.Email = "denissepaolarojas@hotmail.com";
+            contact.Body = "Hola Denisse";
+            contact.Type = "D";
+            string expectedResult = "";
+            MailMessage mm = new MailMessage();
 
-            Assert.Pass("Your first passing test");
-
-            // TODO: Add your test code here
-            //Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void getContactsMessageWithNoEmail_Test()
-        {
-            Assert.Pass("Your first passing test");
+            try
+            {
+                mm = pg.GetMailMessage(contact);
+            }
+            catch(Exception e)
+            {
+                expectedResult = e.Message;
+            }
+            StringAssert.AreEqualIgnoringCase($"<p align='left' >Hola Denisse </p>", mm.Body);
         }
 
         //Notification Tests
@@ -327,110 +327,72 @@ namespace EmailSenderTest
         [Test]
         public void sendEventualEmails_Test()
         {
-            Assert.Pass("Your first passing test");
+            var stub = Substitute.For<INotification>();
+            stub.sendEventualMail().Returns(x => true);
+            var result = stub.sendEventualMail();
+            Assert.That(true, Is.EqualTo(result));
         }
-        [Test]
-        public void sendEventualEmailsWithNoEventualConfiguration_Test()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendEventualEmailsWithNoContacts()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendEventualEmailsWithoutInternetAccess()
-        {
-            Assert.Pass("Your first passing test");
-        }
-
+        
         //Daily Notifications Test
         [Test]
         public void sendDailyEmails_Test()
         {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendDailyEmailsWithNoDailyConfiguration_Test()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendDailyEmailsWithNoContacts()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendDailyEmailsWithoutInternetAccess()
-        {
-            Assert.Pass("Your first passing test");
-        }
+            Contact contact = new Contact();
+            List<Contact> contacts = new List<Contact>();
+            contacts.Add(contact); 
 
-        //Weekly Notifications Test
+            var stub = Substitute.For<INotification>();
+            stub.sendDailyMail(contacts).Returns(x => true);
+            var result = stub.sendDailyMail(contacts);
+            Assert.That(true, Is.EqualTo(result));
+        }
+              //Weekly Notifications Test
         [Test]
         public void sendWeeklyEmails_Test()
         {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendWeeklyEmailsWithNoWeeklyConfiguration_Test()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendWeeklyEmailsWithNoContacts()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendWeeklyEmailsWithoutInternetAccess()
-        {
-            Assert.Pass("Your first passing test");
-        }
+            Contact contact = new Contact();
+            List<Contact> contacts = new List<Contact>();
+            contacts.Add(contact);
 
+            var stub = Substitute.For<INotification>();
+            stub.sendWeeklyMail(contacts).Returns(x => true);
+            var result = stub.sendWeeklyMail(contacts);
+            Assert.That(true, Is.EqualTo(result));
+        }
+     
         //Monthly Notifications Test
         [Test]
         public void sendMonthlyEmails_Test()
         {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendMonthlyEmailsWithNoMonthlyConfiguration_Test()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendMonthlyyEmailsWithNoContacts()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void sendMonthlyEmailsWithoutInternetAccess()
-        {
-            Assert.Pass("Your first passing test");
-        }
+            Contact contact = new Contact();
+            List<Contact> contacts = new List<Contact>();
+            contacts.Add(contact);
 
+            var stub = Substitute.For<INotification>();
+            stub.sendMonthlyMail(contacts).Returns(x => true);
+            var result = stub.sendMonthlyMail(contacts);
+            Assert.That(true, Is.EqualTo(result));
+        }
+        
         //Logs Tests
         [Test]
-        public void logEventualEmailSendingError_Test()
+        public void ShouldCreateLogFileIfEmailisnotSent_Test()
         {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void logDailyEmailSendingError_Test()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void logWeeklyEmailSendingError_Test()
-        {
-            Assert.Pass("Your first passing test");
-        }
-        [Test]
-        public void logMonthlyEmailSendingError_Test()
-        {
-            Assert.Pass("Your first passing test");
+            string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            Program pg = new Program();
+            pg.password = "1234";
+            SmtpClient client = pg.GetSmtpClient();
+            MailMessage mailMessage = new MailMessage("lserrano467@gmail.com", "denissepaolarojas@hotmail.com");
+
+            try
+            {
+                client.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(File.Exists(baseDir + "\\Log.txt"));
+            }
+
         }
 
     }

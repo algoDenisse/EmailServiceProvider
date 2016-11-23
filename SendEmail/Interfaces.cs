@@ -20,15 +20,15 @@ namespace SendEmail
 
     public interface INotification
     {
-        void getConfiguration();
+        void getConfiguration(string dir);
         bool fileExists(string path);
         bool fileEmpty(string path);
         void setDailyConfig(string[] config);
         void setWeeklyConfig(string[] config);
         void setMonthlyConfig(string[] config);
-        void sendDailyMail(List<Contact> contacts);
-        void sendWeeklyMail(List<Contact> contacts);
-        void sendMonthlyMail(List<Contact> contacts);
-        void sendEventualMail();
+        Boolean sendDailyMail(List<Contact> contacts);
+        Boolean sendWeeklyMail(List<Contact> contacts);
+        Boolean sendMonthlyMail(List<Contact> contacts);
+        Boolean sendEventualMail();
     }
 }
