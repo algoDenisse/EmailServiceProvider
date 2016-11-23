@@ -232,16 +232,16 @@ namespace SendEmail
         //    sw.Flush();
         //    sw.Close();
 
+        public string server = ConfigurationManager.AppSettings["server"];
+        public string port = ConfigurationManager.AppSettings["port"];
+        public string password = ConfigurationManager.AppSettings["password"];
+        public string email = ConfigurationManager.AppSettings["email"];
+
 
         public SmtpClient GetSmtpClient()
         {
             try
             {
-                string server = ConfigurationManager.AppSettings["server"];
-                string port = ConfigurationManager.AppSettings["port"];
-                string password = ConfigurationManager.AppSettings["password"];
-                string email = ConfigurationManager.AppSettings["email"];
-
                 SmtpClient smtpClient = new SmtpClient();
                 smtpClient.Host = server;
                 smtpClient.Port = Convert.ToInt32(port);

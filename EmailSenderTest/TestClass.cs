@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SendEmail;
+using System.Net.Mail;
 
 namespace EmailSenderTest
 {
@@ -15,10 +16,8 @@ namespace EmailSenderTest
     {
         private static IEmailSender emailSender;
         Notification nm = new Notification(emailSender);
-        Program pg = new Program();
-
-
-        //Configuration File tests
+        
+         //Configuration File tests
         [Test]
         public void configurationFileExists_Test()
         {
@@ -134,6 +133,7 @@ namespace EmailSenderTest
         [Test]
         public void readExistingContactsFile_Test()
         {
+            Program pg = new Program();
             string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             var dir = baseDir + "\\contacts.csv";
             List<Contact> contactslist = new List<Contact>();
@@ -143,6 +143,7 @@ namespace EmailSenderTest
         [Test]
         public void readEmptyContactsFile_Test()
         {
+            Program pg = new Program();
             //it should return an empty array 
             string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             var dir = baseDir + "\\emptyContacts.csv";
@@ -154,6 +155,7 @@ namespace EmailSenderTest
         [Test]
         public void WhencontactFileisnotfound_Test()
         {
+            Program pg = new Program();
             //An exception 
             string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             var dir = baseDir + "\\idonotexist.csv";
@@ -166,42 +168,136 @@ namespace EmailSenderTest
         [Test]
         public void getSMPTclient_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            SmtpClient expectedResult = pg.GetSmtpClient();
+            Assert.IsInstanceOf<SmtpClient>(expectedResult);
         }
         [Test]
         public void getSMPTclientWithNoInitialConfiguration_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.server = null;
+            pg.port = null;
+            pg.email = null;
+            pg.password = null;
+            string expectedResult;
+            try
+            {
+                SmtpClient client = pg.GetSmtpClient();
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+            }
+            Assert.Throws<System.ArgumentNullException>(() => pg.GetSmtpClient());
+
         }
         [Test]
         public void getSMPTclientWithNoServer_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.server = null;
+            string expectedResult;
+            try
+            {
+                SmtpClient client = pg.GetSmtpClient();
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+            }
+            Assert.Throws<System.ArgumentNullException>(() => pg.GetSmtpClient());
         }
         [Test]
         public void getSMPTclientWithNoPort_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.port = null;
+            string expectedResult = "";
+            try
+            {
+                SmtpClient client = pg.GetSmtpClient();
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+            }
+            
+           StringAssert.Contains("El argumento especificado está fuera del intervalo de valores válidos", expectedResult);
+
         }
         [Test]
-        public void getSMPTclientWithNoPassword_Test()
+        public void sendMailWithNoPassword_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.password = null;
+            string expectedResult;
+            SmtpClient client = pg.GetSmtpClient();
+            MailMessage mailMessage = new MailMessage("lserrano467@gmail.com", "denissepaolarojas@hotmail.com");
+            try
+            {
+                client.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+
+            }
+            Assert.Throws<System.Net.Mail.SmtpException>(() => client.Send(mailMessage));
         }
         [Test]
-        public void getSMPTclientWithWrongPassword_Test()
+        public void sendMailtWithWrongPassword_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.password = "1234";
+            string expectedResult ="";
+            SmtpClient client = pg.GetSmtpClient();
+            MailMessage mailMessage = new MailMessage("lserrano467@gmail.com", "denissepaolarojas@hotmail.com");
+            try
+            {
+                client.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+             }
+            StringAssert.Contains("El servidor SMTP requiere una conexión segura o el cliente no se autenticó", expectedResult);
         }
         [Test]
-        public void getSMPTclientWithNoEmail_Test()
+        public void sendMailWithNoEmail_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.email = null;
+            string expectedResult = "";
+            SmtpClient client = pg.GetSmtpClient();
+            try
+            {
+                MailMessage mailMessage = new MailMessage(pg.email, "denissepaolarojas@hotmail.com");
+                client.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+            }
+            StringAssert.AreEqualIgnoringCase(expectedResult, "El valor no puede ser nulo.\r\nNombre del parámetro: from");           
         }
         [Test]
-        public void getSMPTclientWithWrongEmail_Test()
+        public void sendMailWithWrongEmail_Test()
         {
-            Assert.Pass("Your first passing test");
+            Program pg = new Program();
+            pg.email = "lserrano47@gmail.com";
+            string expectedResult = "";
+            SmtpClient client = pg.GetSmtpClient();
+            MailMessage mailMessage = new MailMessage(pg.email, "denissepaolarojas@hotmail.com");
+            try
+            {
+                client.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                expectedResult = e.Message;
+            }
+            StringAssert.Contains("El servidor SMTP requiere una conexión segura o el cliente no se autenticó", expectedResult);
         }
 
         // Contacts Messages Test
@@ -216,12 +312,6 @@ namespace EmailSenderTest
 
             Assert.Pass("Your first passing test");
 
-            string baseDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            nm.configuration_dir = baseDir + "\\configuration.csv";
-            nm.getConfiguration();
-            CollectionAssert.AllItemsAreNotNull(nm.hora_diario);
-            CollectionAssert.AllItemsAreNotNull(nm.dia_hora_mensual);
-            CollectionAssert.AllItemsAreNotNull(nm.dia_hora_semanal);
             // TODO: Add your test code here
             //Assert.Pass("Your first passing test");
         }
